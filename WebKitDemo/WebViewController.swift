@@ -53,7 +53,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         self.progressView = progressView
 
         webView.loadRequest(NSURLRequest(URL: NSURL(string: "https://www.google.co.jp")))
-        
+
         self.backBarButton.enabled = false
         self.forwardBarButton.enabled = false
     }
@@ -157,7 +157,26 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     func webView(webView: WKWebView!, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge!, completionHandler: ((NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void)!) {
         println("webView:\(webView) didReceiveAuthenticationChallenge:\(challenge) completionHandler:\(completionHandler)")
 
-        completionHandler(NSURLSessionAuthChallengeDisposition.PerformDefaultHandling, nil)
+        let alertController = UIAlertController(title: "Authentication Required", message: webView.URL.host, preferredStyle: .Alert)
+        weak var usernameTextField: UITextField!
+        alertController.addTextFieldWithConfigurationHandler { textField in
+            textField.placeholder = "Username"
+            usernameTextField = textField
+        }
+        weak var passwordTextField: UITextField!
+        alertController.addTextFieldWithConfigurationHandler { textField in
+            textField.placeholder = "Password"
+            textField.secureTextEntry = true
+            passwordTextField = textField
+        }
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { action in
+            completionHandler(.CancelAuthenticationChallenge, nil)
+        }))
+        alertController.addAction(UIAlertAction(title: "Log In", style: .Default, handler: { action in
+            let credential = NSURLCredential(user: usernameTextField.text, password: passwordTextField.text, persistence: NSURLCredentialPersistence.ForSession)
+            completionHandler(.UseCredential, credential)
+        }))
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
 
     func webView(webView: WKWebView!, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
