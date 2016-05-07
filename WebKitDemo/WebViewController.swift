@@ -37,7 +37,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         webView.navigationDelegate = self
         webView.UIDelegate = self
         webView.allowsBackForwardNavigationGestures = true
-        webView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        webView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         webView.addObserver(self, forKeyPath: "loading", options: .New, context: &myContext)
         webView.addObserver(self, forKeyPath: "title", options: .New, context: &myContext)
         webView.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: &myContext)
@@ -48,7 +48,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
         let navigationBarBounds = self.navigationController?.navigationBar.bounds
         let progressView = WebViewProgressView(frame: CGRectMake(0, navigationBarBounds!.size.height - 2, navigationBarBounds!.size.width, 2))
-        progressView.autoresizingMask = .FlexibleWidth | .FlexibleTopMargin
+        progressView.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
         self.navigationController?.navigationBar.addSubview(progressView)
         self.progressView = progressView
 
@@ -58,7 +58,8 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         self.forwardBarButton.enabled = false
     }
 
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        guard let change = change else { return }
         if context != &myContext {
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
             return
@@ -126,17 +127,15 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     // MARK: - WKNavigationDelegate methods
 
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation) {
-        println("webView:\(webView) didStartProvisionalNavigation:\(navigation)")
+        print("webView:\(webView) didStartProvisionalNavigation:\(navigation)")
     }
 
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation) {
-        println("webView:\(webView) didCommitNavigation:\(navigation)")
+        print("webView:\(webView) didCommitNavigation:\(navigation)")
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: ((WKNavigationActionPolicy) -> Void)) {
-        println("webView:\(webView) decidePolicyForNavigationAction:\(navigationAction) decisionHandler:\(decisionHandler)")
-
-        let url = navigationAction.request.URL
+        print("webView:\(webView) decidePolicyForNavigationAction:\(navigationAction) decisionHandler:\(decisionHandler)")
 
         switch navigationAction.navigationType {
         case .LinkActivated:
@@ -151,56 +150,65 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: ((WKNavigationResponsePolicy) -> Void)) {
-        println("webView:\(webView) decidePolicyForNavigationResponse:\(navigationResponse) decisionHandler:\(decisionHandler)")
+        print("webView:\(webView) decidePolicyForNavigationResponse:\(navigationResponse) decisionHandler:\(decisionHandler)")
 
         decisionHandler(.Allow)
     }
 
-    func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
-        println("webView:\(webView) didReceiveAuthenticationChallenge:\(challenge) completionHandler:\(completionHandler)")
+    func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
+        print("webView:\(webView) didReceiveAuthenticationChallenge:\(challenge) completionHandler:\(completionHandler)")
 
-        let alertController = UIAlertController(title: "Authentication Required", message: webView.URL?.host, preferredStyle: .Alert)
-        weak var usernameTextField: UITextField!
-        alertController.addTextFieldWithConfigurationHandler { textField in
-            textField.placeholder = "Username"
-            usernameTextField = textField
+        switch (challenge.protectionSpace.authenticationMethod) {
+        case NSURLAuthenticationMethodHTTPBasic:
+            let alertController = UIAlertController(title: "Authentication Required", message: webView.URL?.host, preferredStyle: .Alert)
+            weak var usernameTextField: UITextField!
+            alertController.addTextFieldWithConfigurationHandler { textField in
+                textField.placeholder = "Username"
+                usernameTextField = textField
+            }
+            weak var passwordTextField: UITextField!
+            alertController.addTextFieldWithConfigurationHandler { textField in
+                textField.placeholder = "Password"
+                textField.secureTextEntry = true
+                passwordTextField = textField
+            }
+            alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { action in
+                completionHandler(.CancelAuthenticationChallenge, nil)
+            }))
+            alertController.addAction(UIAlertAction(title: "Log In", style: .Default, handler: { action in
+                guard let username = usernameTextField.text, let password = passwordTextField.text else {
+                    completionHandler(.RejectProtectionSpace, nil)
+                    return
+                }
+                let credential = NSURLCredential(user: username, password: password, persistence: NSURLCredentialPersistence.ForSession)
+                completionHandler(.UseCredential, credential)
+            }))
+            self.presentViewController(alertController, animated: true, completion: nil)
+        default:
+            completionHandler(.RejectProtectionSpace, nil);
         }
-        weak var passwordTextField: UITextField!
-        alertController.addTextFieldWithConfigurationHandler { textField in
-            textField.placeholder = "Password"
-            textField.secureTextEntry = true
-            passwordTextField = textField
-        }
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { action in
-            completionHandler(.CancelAuthenticationChallenge, nil)
-        }))
-        alertController.addAction(UIAlertAction(title: "Log In", style: .Default, handler: { action in
-            let credential = NSURLCredential(user: usernameTextField.text, password: passwordTextField.text, persistence: NSURLCredentialPersistence.ForSession)
-            completionHandler(.UseCredential, credential)
-        }))
-        self.presentViewController(alertController, animated: true, completion: nil)
     }
 
     func webView(webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation) {
-        println("webView:\(webView) didReceiveServerRedirectForProvisionalNavigation:\(navigation)")
+        print("webView:\(webView) didReceiveServerRedirectForProvisionalNavigation:\(navigation)")
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation) {
-        println("webView:\(webView) didFinishNavigation:\(navigation)")
+        print("webView:\(webView) didFinishNavigation:\(navigation)")
     }
 
     func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation, withError error: NSError) {
-        println("webView:\(webView) didFailNavigation:\(navigation) withError:\(error)")
+        print("webView:\(webView) didFailNavigation:\(navigation) withError:\(error)")
     }
 
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation, withError error: NSError) {
-        println("webView:\(webView) didFailProvisionalNavigation:\(navigation) withError:\(error)")
+        print("webView:\(webView) didFailProvisionalNavigation:\(navigation) withError:\(error)")
     }
 
     // MARK: WKUIDelegate methods
     
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (() -> Void)) {
-        println("webView:\(webView) runJavaScriptAlertPanelWithMessage:\(message) initiatedByFrame:\(frame) completionHandler:\(completionHandler)")
+        print("webView:\(webView) runJavaScriptAlertPanelWithMessage:\(message) initiatedByFrame:\(frame) completionHandler:\(completionHandler)")
         
         let alertController = UIAlertController(title: frame.request.URL?.host, message: message, preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in
@@ -210,7 +218,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: ((Bool) -> Void)) {
-        println("webView:\(webView) runJavaScriptConfirmPanelWithMessage:\(message) initiatedByFrame:\(frame) completionHandler:\(completionHandler)")
+        print("webView:\(webView) runJavaScriptConfirmPanelWithMessage:\(message) initiatedByFrame:\(frame) completionHandler:\(completionHandler)")
         
         let alertController = UIAlertController(title: frame.request.URL?.host, message: message, preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { action in
@@ -222,8 +230,8 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String!) -> Void) {
-        println("webView:\(webView) runJavaScriptTextInputPanelWithPrompt:\(prompt) defaultText:\(defaultText) initiatedByFrame:\(frame) completionHandler:\(completionHandler)")
+    func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String?) -> Void) {
+        print("webView:\(webView) runJavaScriptTextInputPanelWithPrompt:\(prompt) defaultText:\(defaultText) initiatedByFrame:\(frame) completionHandler:\(completionHandler)")
         
         let alertController = UIAlertController(title: frame.request.URL?.host, message: prompt, preferredStyle: .Alert)
         weak var alertTextField: UITextField!

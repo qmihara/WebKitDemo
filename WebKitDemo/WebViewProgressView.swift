@@ -33,7 +33,7 @@ public class WebViewProgressView: UIView {
         self.configureViews()
     }
 
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.configureViews()
     }
@@ -80,7 +80,7 @@ public class WebViewProgressView: UIView {
         self.autoresizingMask = .FlexibleWidth
 
         self.progressView.frame = self.bounds
-        self.progressView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        self.progressView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         self.progressView.backgroundColor = self.tintColor
         self.addSubview(self.progressView)
 
