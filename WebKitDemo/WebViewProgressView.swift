@@ -80,6 +80,7 @@ public class WebViewProgressView: UIView {
         self.autoresizingMask = .FlexibleWidth
 
         self.progressView.frame = self.bounds
+        self.progressView.frame.size.width = 0
         self.progressView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         self.progressView.backgroundColor = self.tintColor
         self.addSubview(self.progressView)
