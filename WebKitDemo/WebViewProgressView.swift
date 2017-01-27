@@ -11,40 +11,40 @@
 
 import UIKit
 
-public class WebViewProgressView: UIView {
+class WebViewProgressView: UIView {
 
-    public var barAnimationDuration = 0.27
-    public var fadeAnimationDuration = 0.27
-    public var fadeOutDelay = 0.1
-    public var progress: Float {
+    var barAnimationDuration = 0.27
+    var fadeAnimationDuration = 0.27
+    var fadeOutDelay = 0.1
+    var progress: Float {
         get {
-            return self._progress
+            return _progress
         }
         set {
-            self.setProgress(newValue, animated: false)
+            setProgress(newValue, animated: false)
         }
     }
 
     private var progressView = UIView()
     private var _progress: Float = 0.0
 
-    public override init(frame: CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        self.configureViews()
+        configureViews()
     }
 
-    public required init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.configureViews()
+        configureViews()
     }
 
-    public func setProgress(progress: Float, animated: Bool) {
-        self._progress = progress
+    func setProgress(_ progress: Float, animated: Bool) {
+        _progress = progress
         let isGrowing = progress > 0.0
-        UIView.animateWithDuration(
-            (isGrowing && animated) ? self.barAnimationDuration: 0.0,
+        UIView.animate(
+            withDuration: (isGrowing && animated) ? barAnimationDuration: 0.0,
             delay: 0,
-            options: UIViewAnimationOptions.CurveEaseInOut,
+            options: UIViewAnimationOptions(),
             animations: {
                 self.progressView.frame.size.width = CGFloat(progress) * self.bounds.size.width
             },
@@ -52,10 +52,10 @@ public class WebViewProgressView: UIView {
         )
 
         if progress >= 1.0 {
-            UIView.animateWithDuration(
-                animated ? self.barAnimationDuration : 0.0,
-                delay: self.fadeOutDelay,
-                options: UIViewAnimationOptions.CurveEaseInOut,
+            UIView.animate(
+                withDuration: animated ? barAnimationDuration : 0.0,
+                delay: fadeOutDelay,
+                options: UIViewAnimationOptions(),
                 animations: {
                     self.progressView.alpha = 0.0
                 }, completion: { completed in
@@ -63,10 +63,10 @@ public class WebViewProgressView: UIView {
                 }
             )
         } else {
-            UIView.animateWithDuration(
-                animated ? self.barAnimationDuration : 0.0,
-                delay: self.fadeOutDelay,
-                options: UIViewAnimationOptions.CurveEaseInOut,
+            UIView.animate(
+                withDuration: animated ? barAnimationDuration : 0.0,
+                delay: fadeOutDelay,
+                options: UIViewAnimationOptions(),
                 animations: {
                     self.progressView.alpha = 1.0
                 },
@@ -76,17 +76,17 @@ public class WebViewProgressView: UIView {
     }
 
     private func configureViews() {
-        self.userInteractionEnabled = false;
-        self.autoresizingMask = .FlexibleWidth
+        isUserInteractionEnabled = false;
+        autoresizingMask = .flexibleWidth
 
-        self.progressView.frame = self.bounds
-        self.progressView.frame.size.width = 0
-        self.progressView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        self.progressView.backgroundColor = self.tintColor
-        self.addSubview(self.progressView)
+        progressView.frame = bounds
+        progressView.frame.size.width = 0
+        progressView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        progressView.backgroundColor = tintColor
+        addSubview(progressView)
 
-        self.barAnimationDuration = 0.27
-        self.fadeAnimationDuration = 0.27
-        self.fadeOutDelay = 0.1
+        barAnimationDuration = 0.27
+        fadeAnimationDuration = 0.27
+        fadeOutDelay = 0.1
     }
 }
