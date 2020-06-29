@@ -44,7 +44,7 @@ class WebViewProgressView: UIView {
         UIView.animate(
             withDuration: (isGrowing && animated) ? barAnimationDuration: 0.0,
             delay: 0,
-            options: UIViewAnimationOptions(),
+            options: UIView.AnimationOptions(),
             animations: {
                 self.progressView.frame.size.width = CGFloat(progress) * self.bounds.size.width
             },
@@ -55,7 +55,7 @@ class WebViewProgressView: UIView {
             UIView.animate(
                 withDuration: animated ? barAnimationDuration : 0.0,
                 delay: fadeOutDelay,
-                options: UIViewAnimationOptions(),
+                options: UIView.AnimationOptions(),
                 animations: {
                     self.progressView.alpha = 0.0
                 }, completion: { completed in
@@ -66,7 +66,7 @@ class WebViewProgressView: UIView {
             UIView.animate(
                 withDuration: animated ? barAnimationDuration : 0.0,
                 delay: fadeOutDelay,
-                options: UIViewAnimationOptions(),
+                options: UIView.AnimationOptions(),
                 animations: {
                     self.progressView.alpha = 1.0
                 },

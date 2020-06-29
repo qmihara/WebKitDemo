@@ -135,7 +135,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (@escaping (WKNavigationActionPolicy) -> Void)) {
-        print("webView:\(webView) decidePolicyForNavigationAction:\(navigationAction) decisionHandler:\(decisionHandler)")
+        print("webView:\(webView) decidePolicyForNavigationAction:\(navigationAction) decisionHandler:\(String(describing: decisionHandler))")
 
         switch navigationAction.navigationType {
         case .linkActivated:
@@ -150,13 +150,13 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: (@escaping (WKNavigationResponsePolicy) -> Void)) {
-        print("webView:\(webView) decidePolicyForNavigationResponse:\(navigationResponse) decisionHandler:\(decisionHandler)")
+        print("webView:\(webView) decidePolicyForNavigationResponse:\(navigationResponse) decisionHandler:\(String(describing: decisionHandler))")
 
         decisionHandler(.allow)
     }
 
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        print("webView:\(webView) didReceiveAuthenticationChallenge:\(challenge) completionHandler:\(completionHandler)")
+        print("webView:\(webView) didReceiveAuthenticationChallenge:\(challenge) completionHandler:\(String(describing: completionHandler))")
 
         switch (challenge.protectionSpace.authenticationMethod) {
         case NSURLAuthenticationMethodHTTPBasic:
@@ -208,7 +208,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     // MARK: WKUIDelegate methods
     
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (@escaping () -> Void)) {
-        print("webView:\(webView) runJavaScriptAlertPanelWithMessage:\(message) initiatedByFrame:\(frame) completionHandler:\(completionHandler)")
+        print("webView:\(webView) runJavaScriptAlertPanelWithMessage:\(message) initiatedByFrame:\(frame) completionHandler:\(String(describing: completionHandler))")
         
         let alertController = UIAlertController(title: frame.request.url?.host, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
@@ -218,7 +218,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (@escaping (Bool) -> Void)) {
-        print("webView:\(webView) runJavaScriptConfirmPanelWithMessage:\(message) initiatedByFrame:\(frame) completionHandler:\(completionHandler)")
+        print("webView:\(webView) runJavaScriptConfirmPanelWithMessage:\(message) initiatedByFrame:\(frame) completionHandler:\(String(describing: completionHandler))")
         
         let alertController = UIAlertController(title: frame.request.url?.host, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
@@ -231,7 +231,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void) {
-        print("webView:\(webView) runJavaScriptTextInputPanelWithPrompt:\(prompt) defaultText:\(defaultText) initiatedByFrame:\(frame) completionHandler:\(completionHandler)")
+        print("webView:\(webView) runJavaScriptTextInputPanelWithPrompt:\(prompt) defaultText:\(String(describing: defaultText)) initiatedByFrame:\(frame) completionHandler:\(String(describing: completionHandler))")
         
         let alertController = UIAlertController(title: frame.request.url?.host, message: prompt, preferredStyle: .alert)
         weak var alertTextField: UITextField!
