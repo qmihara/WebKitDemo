@@ -1,7 +1,7 @@
 WebKitDemo
 ==========
 
-WebKit Demo for iOS 8
+WebKit(WKWebView) Demo for iOS
 
 
 WebViewProgressView.swift
