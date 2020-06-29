@@ -9,24 +9,15 @@
 import UIKit
 import WebKit
 
-var myContext = 0
-
 class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
-
-    weak var webView: WKWebView?
-    weak var progressView: WebViewProgressView?
+    weak var webView: WKWebView!
+    weak var progressView: WebViewProgressView!
     @IBOutlet weak var backBarButton: UIBarButtonItem!
     @IBOutlet weak var forwardBarButton: UIBarButtonItem!
     @IBOutlet weak var stopBarButton: UIBarButtonItem!
     @IBOutlet weak var refreshBarButton: UIBarButtonItem!
 
-    deinit {
-        webView?.removeObserver(self, forKeyPath: "loading")
-        webView?.removeObserver(self, forKeyPath: "title")
-        webView?.removeObserver(self, forKeyPath: "estimatedProgress")
-        webView?.removeObserver(self, forKeyPath: "canGoBack")
-        webView?.removeObserver(self, forKeyPath: "canGoForward")
-    }
+    private var keyValueObservations: [NSKeyValueObservation] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,11 +29,27 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         webView.uiDelegate = self
         webView.allowsBackForwardNavigationGestures = true
         webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        webView.addObserver(self, forKeyPath: "loading", options: .new, context: &myContext)
-        webView.addObserver(self, forKeyPath: "title", options: .new, context: &myContext)
-        webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: &myContext)
-        webView.addObserver(self, forKeyPath: "canGoBack", options: .new, context: &myContext)
-        webView.addObserver(self, forKeyPath: "canGoForward", options: .new, context: &myContext)
+        keyValueObservations.append(webView.observe(\.isLoading, options: [.new]) { [weak self] _, change in
+            guard let isLoading = change.newValue else { return }
+            self?.stopBarButton.isEnabled = isLoading
+            self?.refreshBarButton.isEnabled = !isLoading
+        })
+        keyValueObservations.append(webView.observe(\.title, options: [.new]) { [weak self] _, change in
+            guard let title = change.newValue else { return }
+            self?.navigationItem.title = title
+        })
+        keyValueObservations.append(webView.observe(\.estimatedProgress, options: [.new]) { [weak self] _, change in
+            guard let progress = change.newValue else { return }
+            self?.progressView.setProgress(Float(progress), animated: true)
+        })
+        keyValueObservations.append(webView.observe(\.canGoBack, options: [.new]) { [weak self] _, change in
+            guard let canGoBack = change.newValue else { return }
+            self?.backBarButton.isEnabled = canGoBack
+        })
+        keyValueObservations.append(webView.observe(\.canGoForward, options: [.new]) { [weak self] _, change in
+            guard let canGoForward = change.newValue else { return }
+            self?.forwardBarButton.isEnabled = canGoForward
+        })
         view.addSubview(webView)
         self.webView = webView
 
@@ -58,70 +65,26 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         forwardBarButton.isEnabled = false
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard let change = change else { return }
-        if context != &myContext {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-            return
-        }
-
-        if keyPath == "loading" {
-            if let loading = (change[NSKeyValueChangeKey.newKey] as AnyObject).boolValue {
-                stopBarButton?.isEnabled = loading
-                refreshBarButton?.isEnabled = !loading
-            }
-            return
-        }
-
-        if keyPath == "title" {
-            if let title = change[NSKeyValueChangeKey.newKey] as? String {
-                navigationItem.title = title
-            }
-            return
-        }
-
-        if keyPath == "estimatedProgress" {
-            if let progress = (change[NSKeyValueChangeKey.newKey] as AnyObject).floatValue {
-                progressView?.setProgress(progress, animated: true)
-            }
-            return
-        }
-        
-        if keyPath == "canGoBack" {
-            if let canGoBack = (change[NSKeyValueChangeKey.newKey] as AnyObject).boolValue {
-                backBarButton.isEnabled = canGoBack
-            }
-            return
-        }
-        
-        if keyPath == "canGoForward" {
-            if let canGoForward = (change[NSKeyValueChangeKey.newKey] as AnyObject).boolValue {
-                forwardBarButton.isEnabled = canGoForward
-            }
-            return
-        }
-    }
-
     @IBAction func backBarButtonTapped(_ sender: AnyObject) {
-        if webView!.canGoBack {
-            webView!.goBack()
+        if webView.canGoBack {
+            webView.goBack()
         }
     }
 
     @IBAction func forwardBarButtonTapped(_ sender: AnyObject) {
-        if webView!.canGoForward {
-            webView!.goForward()
+        if webView.canGoForward {
+            webView.goForward()
         }
     }
 
     @IBAction func stopBarButtonTapped(_ sender: AnyObject) {
-        if webView!.isLoading {
-            webView!.stopLoading()
+        if webView.isLoading {
+            webView.stopLoading()
         }
     }
 
     @IBAction func refreshBarButtonTapped(_ sender: AnyObject) {
-        _ = webView?.reload()
+        _ = webView.reload()
     }
 
     // MARK: - WKNavigationDelegate methods
