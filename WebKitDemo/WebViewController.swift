@@ -76,7 +76,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             self.progressView = progressView
         }
 
-        webView.load(URLRequest(url: URL(string: "https://www.google.co.jp")!))
+        webView.load(URLRequest(url: URL(string: "https://duckduckgo.com")!))
 
         backBarButton.isEnabled = false
         forwardBarButton.isEnabled = false
