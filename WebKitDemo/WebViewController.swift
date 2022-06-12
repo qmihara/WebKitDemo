@@ -51,6 +51,9 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             guard let canGoForward = change.newValue else { return }
             self?.forwardBarButton.isEnabled = canGoForward
         })
+        keyValueObservations.append(webView.observe(\.fullscreenState, options: [.new]) { object, _ in
+            print("WebView fullscreen state did change:\(object.fullscreenState)")
+        })
         view.addSubview(webView)
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -229,4 +232,23 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         present(alertController, animated: true, completion: nil)
     }
 
+}
+
+extension WKWebView.FullscreenState: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        let text: String
+        switch self {
+        case .notInFullscreen:
+            text = "notInFullscreen"
+        case .enteringFullscreen:
+            text = "enteringFullscreen"
+        case .inFullscreen:
+            text = "inFullscreen"
+        case .exitingFullscreen:
+            text = "exitingFullscreen"
+        @unknown default:
+            text = "unknown"
+        }
+        return "\(text)(\(rawValue))"
+    }
 }
