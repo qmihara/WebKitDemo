@@ -59,11 +59,18 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         ])
         self.webView = webView
 
-        let navigationBarBounds = navigationController?.navigationBar.bounds
-        let progressView = WebViewProgressView(frame: CGRect(x: 0, y: navigationBarBounds!.size.height - 2, width: navigationBarBounds!.size.width, height: 2))
-        progressView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-        navigationController?.navigationBar.addSubview(progressView)
-        self.progressView = progressView
+        if let navigationBar = navigationController?.navigationBar {
+            let progressView = WebViewProgressView()
+            progressView.translatesAutoresizingMaskIntoConstraints = false
+            navigationBar.addSubview(progressView)
+            NSLayoutConstraint.activate([
+                progressView.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor),
+                progressView.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor),
+                progressView.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+                progressView.heightAnchor.constraint(equalToConstant: 2)
+            ])
+            self.progressView = progressView
+        }
 
         webView.load(URLRequest(url: URL(string: "https://www.google.co.jp")!))
 
