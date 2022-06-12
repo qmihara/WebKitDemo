@@ -27,6 +27,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         let webView = WKWebView(frame: view.bounds, configuration: webViewConfiguration)
         webView.navigationDelegate = self
         webView.uiDelegate = self
+        webView.isFindInteractionEnabled = true
         webView.allowsBackForwardNavigationGestures = false
         keyValueObservations.append(webView.observe(\.isLoading, options: [.new]) { [weak self] _, change in
             guard let isLoading = change.newValue else { return }
@@ -90,6 +91,10 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
     @IBAction func refreshBarButtonTapped(_ sender: AnyObject) {
         _ = webView.reload()
+    }
+
+    @IBAction func searchBarButtonTapped(_ sender: Any) {
+        webView.findInteraction?.presentFindNavigator(showingReplace: false)
     }
 
     // MARK: - WKNavigationDelegate methods

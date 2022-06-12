@@ -43,7 +43,13 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" id="S7w-oa-6nC"/>
+                    <navigationItem key="navigationItem" id="S7w-oa-6nC">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="magnifyingglass" catalog="system" id="gUk-Ct-7vc">
+                            <connections>
+                                <action selector="searchBarButtonTapped:" destination="BYZ-38-t0r" id="TxD-20-FsU"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="backBarButton" destination="Eep-cD-Vbc" id="gPH-RW-n86"/>
@@ -83,6 +89,7 @@
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="chevron.forward" catalog="system" width="97" height="128"/>
         <image name="goforward" catalog="system" width="119" height="128"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
