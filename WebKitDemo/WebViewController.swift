@@ -23,6 +23,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         super.viewDidLoad()
 
         let webViewConfiguration = WKWebViewConfiguration()
+        webViewConfiguration.preferences.isElementFullscreenEnabled = true
 
         let webView = WKWebView(frame: view.bounds, configuration: webViewConfiguration)
         webView.navigationDelegate = self
