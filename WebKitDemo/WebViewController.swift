@@ -27,8 +27,7 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         let webView = WKWebView(frame: view.bounds, configuration: webViewConfiguration)
         webView.navigationDelegate = self
         webView.uiDelegate = self
-        webView.allowsBackForwardNavigationGestures = true
-        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        webView.allowsBackForwardNavigationGestures = false
         keyValueObservations.append(webView.observe(\.isLoading, options: [.new]) { [weak self] _, change in
             guard let isLoading = change.newValue else { return }
             self?.stopBarButton.isEnabled = isLoading
@@ -51,6 +50,12 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             self?.forwardBarButton.isEnabled = canGoForward
         })
         view.addSubview(webView)
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
         self.webView = webView
 
         let navigationBarBounds = navigationController?.navigationBar.bounds

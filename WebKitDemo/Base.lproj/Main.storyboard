@@ -1,85 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="xL0-zX-sKs">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21179.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xzf-UP-lN0">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21169.4"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
-        <scene sceneID="Rih-7V-XOm">
+        <!--Web View Controller-->
+        <scene sceneID="tne-QT-ifu">
             <objects>
-                <navigationController toolbarHidden="NO" hidesBarsOnSwipe="YES" id="xL0-zX-sKs" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ruN-UW-Ddk">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                <viewController id="BYZ-38-t0r" customClass="WebViewController" customModule="WebKitDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <toolbarItems>
+                        <barButtonItem title="Back" image="chevron.backward" catalog="system" id="Eep-cD-Vbc">
+                            <connections>
+                                <action selector="backBarButtonTapped:" destination="BYZ-38-t0r" id="TXU-EI-Xt8"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="zVz-le-72w"/>
+                        <barButtonItem title="Forward" image="chevron.forward" catalog="system" id="r6B-d1-IRQ">
+                            <connections>
+                                <action selector="forwardBarButtonTapped:" destination="BYZ-38-t0r" id="C8h-eU-vPr"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Qlu-kF-I7w"/>
+                        <barButtonItem title="Stop" image="xmark" catalog="system" id="J2u-NN-l4P">
+                            <connections>
+                                <action selector="stopBarButtonTapped:" destination="BYZ-38-t0r" id="n0l-ew-KXT"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="6U8-oG-hnM"/>
+                        <barButtonItem title="Reload" image="goforward" catalog="system" id="LXz-uM-1Uh">
+                            <connections>
+                                <action selector="refreshBarButtonTapped:" destination="BYZ-38-t0r" id="eyH-WT-1nX"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="S7w-oa-6nC"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="backBarButton" destination="Eep-cD-Vbc" id="gPH-RW-n86"/>
+                        <outlet property="forwardBarButton" destination="r6B-d1-IRQ" id="6ze-jt-cey"/>
+                        <outlet property="refreshBarButton" destination="LXz-uM-1Uh" id="LuF-Os-PxU"/>
+                        <outlet property="stopBarButton" destination="J2u-NN-l4P" id="iC0-Dn-chy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="950.76923076923072" y="3.5545023696682461"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="SGU-a1-koG">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="xzf-UP-lN0" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="GU0-aM-r7B">
+                        <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="ucH-se-Xax">
-                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="bDR-rY-9iE">
+                        <rect key="frame" x="0.0" y="761" width="390" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
-                        <segue destination="csi-R5-0R6" kind="relationship" relationship="rootViewController" id="Exj-D0-oQQ"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="d0f-4N-kFh"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bh6-B4-vjy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jDU-R7-bvd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-798" y="213"/>
-        </scene>
-        <!--Web View Controller-->
-        <scene sceneID="eRH-9Z-jr3">
-            <objects>
-                <viewController id="csi-R5-0R6" customClass="WebViewController" customModule="WebKitDemo" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="W0q-Xu-nQC"/>
-                        <viewControllerLayoutGuide type="bottom" id="jNv-cp-THa"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="UJp-BQ-glH">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="1VM-n6-o3U"/>
-                        <barButtonItem systemItem="rewind" id="tg4-tF-lh0">
-                            <connections>
-                                <action selector="backBarButtonTapped:" destination="csi-R5-0R6" id="dTs-T9-VM1"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="JAb-YH-lkq"/>
-                        <barButtonItem systemItem="fastForward" id="UuA-Xy-acl">
-                            <connections>
-                                <action selector="forwardBarButtonTapped:" destination="csi-R5-0R6" id="hQC-st-m8H"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="vV0-C4-ddL"/>
-                        <barButtonItem systemItem="stop" id="Tjc-jp-qQD">
-                            <connections>
-                                <action selector="stopBarButtonTapped:" destination="csi-R5-0R6" id="4gl-hg-kUc"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="LXu-gi-knh"/>
-                        <barButtonItem systemItem="refresh" id="ZWf-ly-qbd">
-                            <connections>
-                                <action selector="refreshBarButtonTapped:" destination="csi-R5-0R6" id="1qj-yp-h0f"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="R2n-FJ-EJW"/>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" id="WE1-ad-QuE"/>
-                    <connections>
-                        <outlet property="backBarButton" destination="tg4-tF-lh0" id="VYJ-ow-dJx"/>
-                        <outlet property="forwardBarButton" destination="UuA-Xy-acl" id="sFO-r4-gjD"/>
-                        <outlet property="refreshBarButton" destination="ZWf-ly-qbd" id="KNe-cT-vly"/>
-                        <outlet property="stopBarButton" destination="Tjc-jp-qQD" id="0JA-TM-xph"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bJ0-vQ-WxH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-39" y="213"/>
+            <point key="canvasLocation" x="21.538461538461537" y="3.5545023696682461"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="chevron.backward" catalog="system" width="97" height="128"/>
+        <image name="chevron.forward" catalog="system" width="97" height="128"/>
+        <image name="goforward" catalog="system" width="119" height="128"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
