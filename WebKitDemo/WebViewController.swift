@@ -51,8 +51,19 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             guard let canGoForward = change.newValue else { return }
             self?.forwardBarButton.isEnabled = canGoForward
         })
-        keyValueObservations.append(webView.observe(\.fullscreenState, options: [.new]) { object, _ in
+        keyValueObservations.append(webView.observe(\.fullscreenState, options: [.new]) { [weak self] object, _ in
             print("WebView fullscreen state did change:\(object.fullscreenState)")
+            let isHidden: Bool
+            switch object.fullscreenState {
+            case .enteringFullscreen:
+                isHidden = true
+            case .exitingFullscreen:
+                isHidden = false
+            default:
+                return
+            }
+            self?.navigationController?.setNavigationBarHidden(isHidden, animated: true)
+            self?.navigationController?.setToolbarHidden(isHidden, animated: true)
         })
         view.addSubview(webView)
         NSLayoutConstraint.activate([
