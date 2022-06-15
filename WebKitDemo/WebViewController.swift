@@ -24,6 +24,17 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
         let webViewConfiguration = WKWebViewConfiguration()
         webViewConfiguration.preferences.isElementFullscreenEnabled = true
+        if let path = Bundle.main.url(forResource: "ContentsBlocker", withExtension: "json"), let json = try? String(contentsOf: path) {
+            WKContentRuleListStore.default().compileContentRuleList(forIdentifier: "example_blocker", encodedContentRuleList: json) { list, error in
+                if let error {
+                    print("Failed to compile content rule list:\(error)")
+                    return
+                }
+                if let list {
+                    webViewConfiguration.userContentController.add(list)
+                }
+            }
+        }
 
         let webView = WKWebView(frame: view.bounds, configuration: webViewConfiguration)
         webView.navigationDelegate = self
@@ -88,7 +99,6 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         }
 
         webView.load(URLRequest(url: URL(string: "https://duckduckgo.com")!))
-
         backBarButton.isEnabled = false
         forwardBarButton.isEnabled = false
     }

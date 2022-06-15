@@ -14,6 +14,7 @@
 		10CCBCD82855E1DA00CFDB30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10CCBCD62855E1DA00CFDB30 /* LaunchScreen.storyboard */; };
 		10CCBCE12855E27200CFDB30 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10CCBCDF2855E27200CFDB30 /* WebViewController.swift */; };
 		10CCBCE22855E27200CFDB30 /* WebViewProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10CCBCE02855E27200CFDB30 /* WebViewProgressView.swift */; };
+		10CCBCE42858CC4700CFDB30 /* ContentsBlocker.json in Resources */ = {isa = PBXBuildFile; fileRef = 10CCBCE32858CC4700CFDB30 /* ContentsBlocker.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		10CCBCD92855E1DA00CFDB30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		10CCBCDF2855E27200CFDB30 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		10CCBCE02855E27200CFDB30 /* WebViewProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewProgressView.swift; sourceTree = "<group>"; };
+		10CCBCE32858CC4700CFDB30 /* ContentsBlocker.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ContentsBlocker.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				10CCBCD42855E1DA00CFDB30 /* Assets.xcassets */,
 				10CCBCD62855E1DA00CFDB30 /* LaunchScreen.storyboard */,
 				10CCBCD92855E1DA00CFDB30 /* Info.plist */,
+				10CCBCE32858CC4700CFDB30 /* ContentsBlocker.json */,
 			);
 			path = WebKitDemo;
 			sourceTree = "<group>";
@@ -128,6 +131,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10CCBCE42858CC4700CFDB30 /* ContentsBlocker.json in Resources */,
 				10CCBCD82855E1DA00CFDB30 /* LaunchScreen.storyboard in Resources */,
 				10CCBCD52855E1DA00CFDB30 /* Assets.xcassets in Resources */,
 				10CCBCD32855E1D900CFDB30 /* Main.storyboard in Resources */,
