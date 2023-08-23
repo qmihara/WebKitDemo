@@ -87,10 +87,14 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
             self.progressView = progressView
         }
 
-        webView.load(URLRequest(url: URL(string: "https://duckduckgo.com")!))
+        if let state = UserDefaults.standard.value(forKey: "WebViewState") {
+            webView.interactionState = state
+        } else {
+            webView.load(URLRequest(url: URL(string: "https://duckduckgo.com")!))
+        }
 
-        backBarButton.isEnabled = false
-        forwardBarButton.isEnabled = false
+        backBarButton.isEnabled = webView.canGoBack
+        forwardBarButton.isEnabled = webView.canGoForward
     }
 
     @IBAction func backBarButtonTapped(_ sender: AnyObject) {
@@ -117,6 +121,10 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
 
     @IBAction func searchBarButtonTapped(_ sender: Any) {
         webView.findInteraction?.presentFindNavigator(showingReplace: false)
+    }
+
+    @IBAction func saveStateBarButtonTapped(_ sender: Any) {
+        UserDefaults.standard.setValue(webView.interactionState, forKey: "WebViewState")
     }
 
     // MARK: - WKNavigationDelegate methods
